@@ -1,0 +1,11 @@
+function RemoteGrid(width,height) {
+	this.width = width;
+	this.height = height;
+	//be lazy and store items on points of grid as x_y?
+	this.lookup = {};
+}
+function Location(xPosition,yPosition,orientation) {
+	this.xPosition = xPosition;
+	this.yPosition = yPosition;
+
+}
