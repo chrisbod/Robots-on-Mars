@@ -1,11 +1,36 @@
+
+
 function RemoteGrid(width,height) {
-	this.width = width;
-	this.height = height;
+	this.width = width;//lower right
+	this.height = height;//upper right
 	//be lazy and store items on points of grid as x_y?
 	this.lookup = {};
 }
-function Location(xPosition,yPosition,orientation) {
+
+function GridPosition(xPosition,yPosition,orientation) {
 	this.xPosition = xPosition;
 	this.yPosition = yPosition;
+	this.orientation = orientation;
+}
+
+
+function Robot() {
+	this.gridPosition = new GridPosition(NaN,NaN,NaN);//NaN? hmmm
+}
+
+function RobotInstruction(instructionString) {
+	if (instructionString) {
+		this.setInstruction(instructionString);
+	}
+}
+//Constants? doc mentions being able to add additional commands later...
+RobotInstruction.prototype.NORTH = new String("N");
+RobotInstruction.prototype.EAST = new String("E");
+RobotInstruction.prototype.SOUTH = new String("S");
+RobotInstruction.prototype.WEST = new String ("W");
+RobotInstruction.prototype.FORWARD = new String("F");
+//hmmm or you could
+RobotInstruction.prototype.addInstruction(key,method) {
+	this[key] = method;
 
 }
