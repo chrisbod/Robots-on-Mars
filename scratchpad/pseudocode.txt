@@ -1,11 +1,10 @@
-
-
 function RemoteGrid(width,height) {
 	this.width = width;//lower right
 	this.height = height;//upper right
 	//be lazy and store items on points of grid as x_y?
 	this.lookup = {};
 }
+
 
 function GridPosition(xPosition,yPosition,orientation) {
 	this.xPosition = xPosition;
@@ -30,7 +29,24 @@ RobotInstruction.prototype.SOUTH = new String("S");
 RobotInstruction.prototype.WEST = new String ("W");
 RobotInstruction.prototype.FORWARD = new String("F");
 //hmmm or you could
-RobotInstruction.prototype.addInstruction(key,method) {
+RobotInstruction.prototype.addInstruction = function robotInstruction_addInstruction(key,method) {
 	this[key] = method;
-
 }
+RobotInstruction.prototype.setInstruction = function robotInstruction_setInstruction(instructionString) {
+	//reset the instruction index...
+	this.instructionIndex = -1;
+	this.instructionString = instructionString;
+}
+RobotInstruction.prototype.getNextInstruction = function robotInstruction_getNextInstruction() {
+	return this.instructionString.charAt(++this.instructionIndex);//NB: don't forget handling reaching the end of the isntruction string...
+}
+function RobotScent(xCoordinate,yCoordinate) {
+	this.xCoordinate = xCoordinate;
+	this.yCoordinate = yCoordinate;
+}
+//hmmm my current 'Grid Positions' aren't grid Positions they're robot positions (grid positions with an orientation too);
+//RobotScents have grid positions but no orientation
+//thus any coordinate (in a grid) can contain multiple Items (ie a robot and a scent);
+//Doesn't look much like BDD when you mock out so much code - oh well old habits die hard
+
+
