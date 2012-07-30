@@ -40,8 +40,15 @@
 	RobotsOnMars.prototype.getRobotOnProcessInstructionEndHandler = function robotsOnMars_getRobotOnProcessInstructionEndHandler() {
 		var robotsOnMars = this;
 		return function robotsOnMars_getRobotOnProcessInstructionEndHandler_Closure() {
-			//check for robot being lost etc
+			robotsOnMars.buildOutputFromRobot(this);
 		}
+	}
+	RobotsOnMars.prototype.buildOutputFromRobot = function robots_buildOutputFromRobot(robot) {
+		this.lastOutput = robot.coordinate.x+" "+robot.coordinate.y+" "+robot.orientation;
+		if (!this.grid.hasPosition(robot.coordinate.x,robot.coordinate.y)) {
+			this.lastOutput += " LOST"
+		}
+	
 	}
 	RobotsOnMars.prototype.instructRobot = function robotsOnMars_instructRobot(instruction) {
 		if (instruction.length >= 100){//validate here as there is no reason for robots to care about how long their instructions are
@@ -53,9 +60,10 @@
 		robot.processInstruction(instruction);
 	}
 	RobotsOnMars.prototype.getOutput = function robotsOnMars_getOutput() {
-		
+		return this.lastOutput;
 	}
 	RobotsOnMars.prototype.renderOutput = function robotsOnMars_renderOutput() {
+		alert(this.lastOutput);
 	}
 	
 	
