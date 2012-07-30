@@ -3,139 +3,36 @@
 	<head>
 	<script src="grid.js"></script>
 	<script src="robot.js"></script>
+	<script src="robots-on-mars.js"></script>
+	<script src="robots-on-mars-tests.js"></script>
 	<script>
-	function RobotsOnMars() {}
-	RobotsOnMars.prototype.createGrid = function robotsOnMars_createGrid(gridDefinition) {
-		this.definitionString = gridDefinition;
-		this.definitionArray = gridDefinition.split(" ");
-		this.grid = new RemoteGrid(+this.definitionArray[0],+this.definitionArray[1]);
-		this.grid.setBoundaries(50,50);
-		this.robots = [];
-		this.lostRobots = [];
-		return this;
-	}
-	//Properties
-	RobotsOnMars.prototype.definitionString = "";
-	RobotsOnMars.prototype.definitionArray = void (Array) || null;
-	RobotsOnMars.prototype.grid = void (RemoteGrid) || null;
-	RobotsOnMars.prototype.robots = void (Array(Robot)) || null;
-	RobotsOnMars.prototype.currentOutput = "";
-	
-	
-	//Methods
-	RobotsOnMars.prototype.insertRobot = function robotsOnMars_insertRobot(robotDefinition) {
-		delete this.currentOutput;
-		var robotDefinitionArray = robotDefinition.split(" "),
-			x = +robotDefinitionArray[0],
-			y = +robotDefinitionArray[1],
-			robot = new Robot(x,y,robotDefinitionArray[2],this.grid);
-		this.grid.getPosition(x,y).addItem(robot);
-		robot.onMoveForward = this.getRobotOnMoveForwardHandler();
-		robot.onProcessInstructionEnd = this.getRobotOnProcessInstructionEndHandler();
-		this.robots.push(robot);
-	}
-	RobotsOnMars.prototype.getRobotOnMoveForwardHandler = function robotsOnMars_getRobotOnMoveForwardHandler() {
-		var robotsOnMars = this;
-		return function robotsOnMars_getRobotOnMoveForwardHandler_Closure() {
-			//this is starting to feel  wrong see Issue #6 - too circular
-			robotsOnMars.checkRobotStatus(this);
+	//just doing this as global functions - this document is not production quality - it's a demo (and it's past 4pm!) - hopefully the js behind it nearly is (well apart from the total lack of documentation style comments)
+		var robotsOnMarsDemo = new RobotsOnMars();
+		function createGrid() {
+			var gridDefinition = document.getElementsByName("gridsize")[0].value;
+			if (!/\d+\s\d+/.test(gridDefinition)) return alert("please enter a valid grid definition");
+			robotsOnMarsDemo.createGrid(gridDefinition);
+			var robotPosition = document.getElementsByName("robotposition")[0],
+				robotInstructions = document.getElementsByName("robotinstructions")[0];
+			robotPosition.disabled = false;
+			robotInstructions.disabled = false;
+		}
+		function run() {
+			var robotPosition = document.getElementsByName("robotposition")[0],
+				robotInstructions = document.getElementsByName("robotinstructions")[0],
+				robotPositionValue = robotPosition.value,
+				robotInstructionsValue = robotInstructions.value;
+			if (!/\d+\s\d+\s[NEWS]/.test(robotPositionValue)) {
+				return alert("Please enter a valid robot position");
+			}
+			if (!/^[LRF]+$/.test(robotInstructionsValue)) {
+				return alert("Please enter a valid set of robot instructions")
+			}
+			robotsOnMarsDemo.insertRobot(robotPositionValue);
+			robotsOnMarsDemo.instructRobot(robotInstructionsValue);
+			document.getElementsByName("output")[0].value += robotsOnMarsDemo.getOutput()+"\n";
 			
 		}
-	}
-	RobotsOnMars.prototype.checkRobotStatus =  function (robot) {
-		if (this.robotIsLost(robot)) {
-			robot.lost = true;
-		}
-	}
-	RobotsOnMars.prototype.robotIsLost = function (robot) {
-		return !this.grid.hasPosition(robot.coordinate.x,robot.coordinate.y)
-	}
-	RobotsOnMars.prototype.getRobotOnProcessInstructionEndHandler = function robotsOnMars_getRobotOnProcessInstructionEndHandler() {
-		var robotsOnMars = this;
-		return function robotsOnMars_getRobotOnProcessInstructionEndHandler_Closure() {
-			//this is totally the wrong approach I think see Issue #5
-			robotsOnMars.buildOutputFromRobot(this);
-		}
-	}
-	RobotsOnMars.prototype.buildOutputFromRobot = function robots_buildOutputFromRobot(robot) {
-		if (robot.lost) {
-			this.currentOutput = robot.scent.coordinate.x + " " + robot.scent.coordinate.y +" "+robot.orientation + " LOST"
-		} else {
-		this.currentOutput = robot.coordinate.x+" "+robot.coordinate.y+" "+robot.orientation;
-		}
-	
-	}
-	RobotsOnMars.prototype.instructRobot = function robotsOnMars_instructRobot(instruction) {
-		if (instruction.length >= 100){//validate here as there is no reason for robots to care about how long their instructions are
-		//ALSO see Issue #3
-			throw "Illegal instruction length for a robotsOnMars Robot";
-		}
-		//for the moment a robot instruction will ALWAYS go to the newest robot;
-		var robot = this.robots[this.robots.length-1];
-		robot.processInstruction(instruction);
-	}
-	RobotsOnMars.prototype.getOutput = function robotsOnMars_getOutput() {
-		return this.currentOutput;
-	}
-	RobotsOnMars.prototype.renderOutput = function robotsOnMars_renderOutput() {
-		alert(this.currentOutput);
-	}
-	
-	
-	
-
-	
-	
-	</script>
-	<script>
-
-
-window.onerror = function (error) {//now that is lazy
-	alert(error);
-}
-	var robotsOnMars = new RobotsOnMars();
-robotsOnMars.createGrid("5 3"); //things are better when you pay attention
-
-//putting back in grid testing (a bit sneaky to have it here as it really is a 'unit' test for grids not robotsOnMars)
-//over doing it a bit but logged as Issue #1;
-
-if (!robotsOnMars.grid.hasPosition(0,0) || robotsOnMars.grid.hasPosition(6,4)) {
-	throw "robots on mars grid is not sized correctly";
-}
-
-robotsOnMars.insertRobot("1 1 E");
-robotsOnMars.instructRobot("RFRFRFRF"); //I'll never really get into chaining properly
-
-if (robotsOnMars.getOutput()!="1 1 E") {
-	throw "Unexpected result [1 1 E,RFRFRFRF]->"+robotsOnMars.getOutput();
-}
-robotsOnMars.renderOutput();
-
-robotsOnMars
-	.insertRobot("3 2 N");
-//check that we have a 'clean state' now that a new robot is in play
-if (robotsOnMars.getOutput()) {
-	throw "Inserted new robot but output is not clean ("+robotsOnMars.getOutput()+")";
-}
-
-robotsOnMars.instructRobot("FRRFLLFFRRFLL")
-
-if (robotsOnMars.getOutput()!="3 3 N LOST") {
-	throw "Unexpected result [3 2 N,FRRFLLFFRRFLL]->"+robotsOnMars.getOutput();
-}
-robotsOnMars.renderOutput();
-robotsOnMars.insertRobot("0 3 W");
-robotsOnMars.instructRobot("LLFFFLFLFL")
-if (robotsOnMars.getOutput()!="2 3 S") {
-	throw "Unexpected result [0 3 W,LLFFFLFLFL]->"+robotsOnMars.getOutput();
-}
-robotsOnMars.renderOutput()
-
-
-
-
-	
-
 	</script>
 	<style>
 	fieldset, div {
@@ -149,26 +46,27 @@ robotsOnMars.renderOutput()
 	</style>
 	</head>
 	<body>
-		<form>
+		<form id="robotsOnMarsInput">
 		<fieldset>
 			<legend>Robots On Mars</legend>
 			<div>
 			<label>
-				Grid size (e.g "10 10"): <input name="gridsize">
+				Grid size (e.g "10 10"): <input name="gridsize" id="gridsize">
 			</label>
 			<input type="reset">
+			<input type="button" value="Create Grid" onclick="createGrid()">
 			</div>
 			<fieldset>
 				<label>
-					New Robot Position: <input name="robotposition">
+					New Robot Position: (e.g "3 2 W")<input name="robotposition" disabled>
 				</label>
 				<label>
-					Robot Instructions: <input name="robotinstructions">
+					Robot Instructions: (e.g. "LFLFFR")<input name="robotinstructions" disabled>
 				<label>
-				<input type="submit" value="Insert and Instruct">
+				<input type="button" value="Insert and Instruct" onclick="run()">
 			</fieldset>
 			<label>Output: </label>
-			<textarea name="output" style="height: 10em"></textarea>
+			<textarea name="output" style="height: 10em" ></textarea>
 			
 		</fieldset>
 		</form>
