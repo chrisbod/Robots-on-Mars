@@ -16,8 +16,8 @@ RemoteGrid.prototype.maxHeight = -1;
 RemoteGrid.prototype.lookup = void (Object) || null;
 //methods
 RemoteGrid.prototype.populateLookup = function remoteGrid_populateLookup() {
-	for (var lookup = this.lookup,width = this.width, x = 0; x!=width; x++) {
-		for (var y = 0, height = this.height; y!=height; y++) {
+	for (var lookup = this.lookup,width = this.width, x = 0; x!=width+1; x++) {
+		for (var y = 0, height = this.height; y!=height+1; y++) {
 			lookup[x+"_"+y] = new GridPosition(new GridCoordinate(x,y));//did you say not to over engineer this?
 		}
 	}
