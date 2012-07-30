@@ -22,6 +22,16 @@ RemoteGrid.prototype.populateLookup = function remoteGrid_populateLookup() {
 RemoteGrid.prototype.hasPosition = function remoteGrid_hasPosition(x,y) {
 	return this.lookup[x+"_"+y] ? true : false;
 }
+RemoteGrid.prototype.setBoundaries = function remoteGrid_setBoundaries(maxWidth,maxHeight) {
+	this.maxWidth = maxWidth;
+	this.maxHeight = maxHeight;
+	this.checkBoundaries();
+}
+RemoteGrid.prototype.checkBoundaries = function remoteGrid_checkBoundaries() {
+	if (this.width>this.maxWidth || this.height>this.maxHeight) {
+		throw "Illegal boundaries set for remoteGrid";
+	}
+}
 
 function GridCoordinate(x,y) {
 	this.x = x;
