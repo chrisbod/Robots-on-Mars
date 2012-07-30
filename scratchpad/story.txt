@@ -1,0 +1,14 @@
+//Psuedo code for the story/testing etc - not going to use a testing framework per se (although I think I just fell in love with Jasmine)
+
+
+window.onerror = function (error) {//now that is lazy
+	alert(error);
+}
+
+RobotsOnMars.mapMars(50,50); //we'll pretend that creating the grid is part of the story..
+
+//check to see whether our map has (some of ) the coordinates we'd expect
+if (!RobotsOnMars.hasCordinate(0,0) || RobotsOnMars.hasCoordinate(50,50)) {
+	throw "Mapping has not resulted in correct coordinate generation";
+}
+	
