@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+	<head>
+	<style>
+	fieldset, div {
+		float: left;
+		clear: both;
+	}
+		label {
+			display: block;
+		}
+	
+	</style>
+	</head>
+	<body>
+		<form>
+		<fieldset>
+			<legend>Robots On Mars</legend>
+			<div>
+			<label>
+				Grid size (e.g "10 10"): <input name="gridsize">
+			</label>
+			<input type="reset">
+			</div>
+			<fieldset>
+				<label>
+					New Robot Position: <input name="robotposition">
+				</label>
+				<label>
+					Robot Instructions: <input name="robotinstructions">
+				<label>
+				<input type="submit" value="Insert and Instruct">
+			</fieldset>
+			<label>Output: </label>
+			<textarea name="output" style="height: 10em"></textarea>
+			
+		</fieldset>
+		</form>
+	
+	</body>
+
+
+
+</html>
