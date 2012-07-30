@@ -5,10 +5,45 @@ window.onerror = function (error) {//now that is lazy
 	alert(error);
 }
 
-RobotsOnMars.mapMars(50,50); //we'll pretend that creating the grid is part of the story..
+RobotsOnMars.createGrid("5 3"); //things are better when you pay attention
 
-//check to see whether our map has (some of ) the coordinates we'd expect
-if (!RobotsOnMars.hasCordinate(0,0) || RobotsOnMars.hasCoordinate(50,50)) {
-	throw "Mapping has not resulted in correct coordinate generation";
+//sanity check 
+if (!RobotsOnMars.hasCoordinate(0,0) || RobotsOnMars.hasCoordinate(5,3)) {
+	throw "Mapping has resulted in incorrect coordinate generation";
 }
+
+
+RobotsOnMars
+	.insertRobot("1 1 E")
+	.instructRobot("RFRFRFRF")
+
+if (RobotsOnMars.getOutput()!="1 1 E") {
+	throw "Unexpected result [1 1 E,RFRFRFRF]->"+RobotsOnMars.getOutput();
+}
+RobotsOnMars.renderOutput();
+
+RobotsOnMars
+	.insertRobot("3 2 N");
+//check that we have a 'clean state' now that a new robot is in play
+if (RobotsOnMars.getOutput()) {
+	throw "Inserted new robot but output is not clean ("+RobotsOnMars.getOutput()+")";
+}
+
+RobotsOnMars.instructRobot("FRRFLLFFRRFLL")
+
+if (RobotsOnMars.getOutput()!="3 3 N LOST") {
+	throw "Unexpected result [3 2 N,FRRFLLFFRRFLL]->"+RobotsOnMars.getOutput();
+}
+RobotsOnMars.renderOutput();
+RobotsOnMars
+	.insertRobot("0 3 W")
+	.instructRobot("LLFFFLFLFL")
+if (RobotsOnMars.getOutput()!="2 3 S") {
+	throw "Unexpected result [0 3 W,LLFFFLFLFL]->"+RobotsOnMars.getOutput();
+}
+RobotsOnMars.renderOutput()
+
+
+
+
 	
