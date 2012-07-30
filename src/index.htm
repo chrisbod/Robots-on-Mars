@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 	<head>
+	<title>Robots On Mars</title>
 	<script src="grid.js"></script>
 	<script src="robot.js"></script>
 	<script src="robots-on-mars.js"></script>
@@ -16,6 +17,7 @@
 				robotInstructions = document.getElementsByName("robotinstructions")[0];
 			robotPosition.disabled = false;
 			robotInstructions.disabled = false;
+			robotPosition.focus()
 		}
 		function run() {
 			var robotPosition = document.getElementsByName("robotposition")[0],
@@ -32,6 +34,12 @@
 			robotsOnMarsDemo.instructRobot(robotInstructionsValue);
 			document.getElementsByName("output")[0].value += robotsOnMarsDemo.getOutput()+"\n";
 			
+		}
+		function reset() {
+			var robotPosition = document.getElementsByName("robotposition")[0],
+				robotInstructions = document.getElementsByName("robotinstructions")[0];
+			robotPosition.disabled = true;
+			robotInstructions.disabled = true;
 		}
 	</script>
 	<style>
@@ -50,11 +58,10 @@
 		<fieldset>
 			<legend>Robots On Mars</legend>
 			<div>
+			<!--wooah DOM level 0 events!!-->
 			<label>
-				Grid size (e.g "10 10"): <input name="gridsize" id="gridsize">
+				Grid size (e.g "10 10"): <input name="gridsize" id="gridsize" onchange="createGrid()">
 			</label>
-			<input type="reset">
-			<input type="button" value="Create Grid" onclick="createGrid()">
 			</div>
 			<fieldset>
 				<label>
@@ -67,7 +74,7 @@
 			</fieldset>
 			<label>Output: </label>
 			<textarea name="output" style="height: 10em" ></textarea>
-			
+			<input type="reset" onclick="reset()">
 		</fieldset>
 		</form>
 	
