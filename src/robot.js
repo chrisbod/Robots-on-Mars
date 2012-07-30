@@ -4,10 +4,10 @@ function Robot(x,y,orientation) {
 	this.orientation = orientation;
 }
 //constants
-Robot.prototype.NORTH = new String("N");
-Robot.prototype.EAST = new String("E");
-Robot.prototype.SOUTH = new String("S");
-Robot.prototype.WEST = new String("W");
+Robot.prototype.NORTH = "N";
+Robot.prototype.EAST = "E";
+Robot.prototype.SOUTH = "S";
+Robot.prototype.WEST = "W";
 Robot.prototype.ORIENTATION_LOOKUP = {
 	N: 0,
 	E: 1,
@@ -21,13 +21,10 @@ Robot.prototype.ORIENTATION_LOOKUP = {
 
 //remember left and right are simply orientation changes not movement
 //should probably be named CLOCKWISE and ANTICLOCKWISE ;-) see Issue #4
-Robot.prototype.LEFT = new String("L");
-Robot.prototype.RIGHT = new String("R");
+Robot.prototype.LEFT = "L";
+Robot.prototype.RIGHT ="R";
 
-Robot.prototype.FORWARD = new String("F");
-
-//Hmmmm should a robot ever be lost from it's own point of view - I think not...
-Robot.prototype.LOST = new String("LOST");
+Robot.prototype.FORWARD = "F";
 
 //properties
 Robot.prototype.coordinate = void (GridCoordinate) || null;
@@ -53,6 +50,9 @@ Robot.prototype.processInstruction = function robot_processInstruction(instructi
 				throw "Unrecognized instruction ("+instruction.charAt(i)+") given to robot";
 			}
 		}
+	}
+	if (this.onProcessInstructionEnd) {
+		this.onProcessInstructionEnd();
 	}
 }
 Robot.prototype.turnLeft = function robot_turnLeft() {
@@ -92,8 +92,8 @@ Robot.prototype.moveForward = function robot_moveForward() {
 		default: {
 			throw "Unknown orientation for robot";
 		}
-		if (this.onMoveForward) {
-			this.onMoveForward()
-		}
+	}
+	if (this.onMoveForward) {
+		this.onMoveForward()
 	}
 }

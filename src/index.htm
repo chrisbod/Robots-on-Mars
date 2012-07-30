@@ -11,6 +11,7 @@
 		this.grid = new RemoteGrid(+this.definitionArray[0],+this.definitionArray[1]);
 		this.grid.setBoundaries(50,50);
 		this.robots = [];
+		this.lostRobots = [];
 		return this;
 	}
 	//Properties
@@ -22,15 +23,34 @@
 	
 	//Methods
 	RobotsOnMars.prototype.insertRobot = function robotsOnMars_insertRobot(robotDefinition) {
-		var robotDefinitionArray = robotDefinition.split(" ");
-		this.robots.push(new Robot(+robotDefinitionArray[0],+robotDefinitionArray[1],robotDefinitionArray[2]));
+		var robotDefinitionArray = robotDefinition.split(" "),
+			robot = new Robot(+robotDefinitionArray[0],+robotDefinitionArray[1],robotDefinitionArray[2]);
+		robot.onMoveForward = this.getRobotOnMoveForwardHandler();
+		robot.onProcessInstructionEnd = this.getRobotOnProcessInstructionEndHandler();
+		this.robots.push(robot);
+	}
+	RobotsOnMars.prototype.getRobotOnMoveForwardHandler = function robotsOnMars_getRobotOnMoveForwardHandler() {
+		var robotsOnMars = this;
+		return function robotsOnMars_getRobotOnMoveForwardHandler_Closure() {
+			//this event handler is totally useless
+			//should probably have reread the document properly
+			
+		}
+	}
+	RobotsOnMars.prototype.getRobotOnProcessInstructionEndHandler = function robotsOnMars_getRobotOnProcessInstructionEndHandler() {
+		var robotsOnMars = this;
+		return function robotsOnMars_getRobotOnProcessInstructionEndHandler_Closure() {
+			//check for robot being lost etc
+		}
 	}
 	RobotsOnMars.prototype.instructRobot = function robotsOnMars_instructRobot(instruction) {
 		if (instruction.length >= 100){//validate here as there is no reason for robots to care about how long their instructions are
 		//ALSO see Issue #3
 			throw "Illegal instruction length for a robotsOnMars Robot";
 		}
-		return this;
+		//for the moment a robot instruction will ALWAYS go to the newest robot;
+		var robot = this.robots[this.robots.length-1];
+		robot.processInstruction(instruction);
 	}
 	RobotsOnMars.prototype.getOutput = function robotsOnMars_getOutput() {
 		
