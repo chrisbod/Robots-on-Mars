@@ -75,7 +75,7 @@ Robot.prototype.turnRight = function robot_turnRight() {
 	}
 	this.orientation = this.ORIENTATION_LOOKUP[currentOrientationInt];
 }
-Robot.prototype.moveForward = function robot_moveForward() {
+Robot.prototype.moveForward = function robot_moveForward() {//see Issue #8
 	var coordinate = this.coordinate,
 		currentX = coordinate.x, //store these to move the scent correctly
 		currentY = coordinate.y,
