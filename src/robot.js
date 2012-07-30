@@ -22,10 +22,30 @@ Robot.prototype.LOST = new String("LOST");
 Robot.prototype.coordinate = void (GridCoordinate) || null;
 Robot.prototype.orientation = "";
 
-
-
-
 //methods
+Robot.prototype.processInstruction = function robot_processInstruction(instruction) {
+	for (var i=0;i!=instruction.length;i++) {
+		switch (instruction.charAt(i)) {
+			case this.LEFT: {
+				this.turnLeft();
+				break;
+			}
+			case this.RIGHT: {
+				this.turnRight();
+				break;
+			}
+			case this.FORWARD: {
+				this.moveForward();
+				break;
+			}
+			default: {
+				throw "Unrecognized instruction ("+instruction.charAt(i)+") given to robot";
+			}
+		}
+	
+	}
+
+}
 Robot.prototype.turnLeft = function robot_turnLeft() {
 
 }

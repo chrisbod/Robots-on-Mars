@@ -26,6 +26,10 @@
 		this.robots.push(new Robot(+robotDefinitionArray[0],+robotDefinitionArray[1],robotDefinitionArray[2]));
 	}
 	RobotsOnMars.prototype.instructRobot = function robotsOnMars_instructRobot(instruction) {
+		if (instruction.length >= 100){//validate here as there is no reason for robots to care about how long their instructions are
+		//ALSO see Issue #3
+			throw "Illegal instruction length for a robotsOnMars Robot";
+		}
 		return this;
 	}
 	RobotsOnMars.prototype.getOutput = function robotsOnMars_getOutput() {
