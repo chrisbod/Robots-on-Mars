@@ -112,9 +112,8 @@ if (robotsOnMars.getOutput()!="3 3 N LOST") {
 	throw "Unexpected result [3 2 N,FRRFLLFFRRFLL]->"+robotsOnMars.getOutput();
 }
 robotsOnMars.renderOutput();
-robotsOnMars
-	.insertRobot("0 3 W")
-	.instructRobot("LLFFFLFLFL")
+robotsOnMars.insertRobot("0 3 W");
+robotsOnMars.instructRobot("LLFFFLFLFL")
 if (robotsOnMars.getOutput()!="2 3 S") {
 	throw "Unexpected result [0 3 W,LLFFFLFLFL]->"+robotsOnMars.getOutput();
 }
