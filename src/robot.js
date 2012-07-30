@@ -1,6 +1,8 @@
 //uses GridCoordinate(grid.js)
-function Robot(x,y,orientation) {
+function Robot(x,y,orientation,ownerGrid) {
 	this.coordinate = new GridCoordinate(x,y);
+	this.scent = new RobotScent(-1,-1);
+	this.ownerGrid = ownerGrid;
 	this.orientation = orientation;
 }
 //constants
@@ -29,10 +31,11 @@ Robot.prototype.FORWARD = "F";
 //properties
 Robot.prototype.coordinate = void (GridCoordinate) || null;
 Robot.prototype.orientation = "";
+Robot.prototype.lost = false;
 
 //methods
 Robot.prototype.processInstruction = function robot_processInstruction(instruction) {
-	for (var i=0;i!=instruction.length;i++) {
+	for (var i=0;i!=instruction.length && !this.lost;i++) {
 		switch (instruction.charAt(i)) {
 			case this.LEFT: {
 				this.turnLeft();
@@ -51,6 +54,7 @@ Robot.prototype.processInstruction = function robot_processInstruction(instructi
 			}
 		}
 	}
+	
 	if (this.onProcessInstructionEnd) {
 		this.onProcessInstructionEnd();
 	}
@@ -72,28 +76,52 @@ Robot.prototype.turnRight = function robot_turnRight() {
 	this.orientation = this.ORIENTATION_LOOKUP[currentOrientationInt];
 }
 Robot.prototype.moveForward = function robot_moveForward() {
+	var coordinate = this.coordinate,
+		currentX = coordinate.x, //store these to move the scent correctly
+		currentY = coordinate.y,
+		currentPosition = this.ownerGrid.getPosition(currentX,currentY),
+		currentScentPosition = this.ownerGrid.getPosition(this.scent.coordinate.x,this.scent.coordinate.y),
+		newPosition;
 	switch (this.orientation) {
 		case this.NORTH: {
-			this.coordinate.y++;//remember origin is bottom left not top left;
+			coordinate.y++;//remember origin is bottom left not top left;
 			break;
 		}
 		case this.EAST: {
-			this.coordinate.x++;
+			coordinate.x++;
 			break;
 		}
 		case this.SOUTH: {
-			this.coordinate.y--;
+			coordinate.y--;
 			break;
 		}
 		case this.WEST: {
-			this.coordinate.x--;
+			coordinate.x--;
 			break;
 		}
 		default: {
 			throw "Unknown orientation for robot";
 		}
 	}
+	newPosition = this.ownerGrid.getPosition(coordinate.x,coordinate.y);
+	
+	if (newPosition == null) {//owner grid does not contain new position
+		this.lost = true;
+	} else {
+		currentPosition.removeItem(this);
+		newPosition.addItem(this);
+	}
+	if (currentScentPosition) {
+		currentScentPosition.removeItem(this.scent);
+	}
+	currentPosition.addItem(this.scent);
 	if (this.onMoveForward) {
 		this.onMoveForward()
 	}
 }
+
+function RobotScent(x,y,ownerGrid) {
+	this.coordinate = new GridCoordinate(x,y);
+}
+
+

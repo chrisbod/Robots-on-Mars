@@ -25,6 +25,9 @@ RemoteGrid.prototype.populateLookup = function remoteGrid_populateLookup() {
 RemoteGrid.prototype.hasPosition = function remoteGrid_hasPosition(x,y) {
 	return this.lookup[x+"_"+y] ? true : false;
 }
+RemoteGrid.prototype.getPosition = function remoteGrid_getPosition(x,y) {
+	return this.lookup[x+"_"+y]||null;
+}
 RemoteGrid.prototype.setBoundaries = function remoteGrid_setBoundaries(maxWidth,maxHeight) {
 	this.maxWidth = maxWidth;
 	this.maxHeight = maxHeight;
@@ -47,6 +50,23 @@ function GridCoordinate(x,y) {
 }
 function GridPosition(coordinate) {
 	this.coordinate = coordinate;
-	this.items = []; //okay so according to the document it looks like a position will only have one item at a time (Robot or Scent);
+	this.items = []; 
+}
+GridPosition.prototype.addItem = function (item) {
+	item.coordinate.x = this.coordinate.x;
+	item.coordinate.y = this.coordinate.y;
+	this.items.push(item);
+	return item;
+}
+GridPosition.prototype.removeItem = function (item) {
+	for (var i=0;i!=this.items.length;i++) {
+		if (this.items[i]==item) {
+			this.items.splice(i,1);
+			delete item.coordinate.x;
+			delete item.coordinate.y;
+			return item;
+		}
+	}
+	return null;
 }
 

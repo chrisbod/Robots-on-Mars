@@ -26,7 +26,10 @@
 	RobotsOnMars.prototype.insertRobot = function robotsOnMars_insertRobot(robotDefinition) {
 		delete this.currentOutput;
 		var robotDefinitionArray = robotDefinition.split(" "),
-			robot = new Robot(+robotDefinitionArray[0],+robotDefinitionArray[1],robotDefinitionArray[2]);
+			x = +robotDefinitionArray[0],
+			y = +robotDefinitionArray[1],
+			robot = new Robot(x,y,robotDefinitionArray[2],this.grid);
+		this.grid.getPosition(x,y).addItem(robot);
 		robot.onMoveForward = this.getRobotOnMoveForwardHandler();
 		robot.onProcessInstructionEnd = this.getRobotOnProcessInstructionEndHandler();
 		this.robots.push(robot);
@@ -34,10 +37,18 @@
 	RobotsOnMars.prototype.getRobotOnMoveForwardHandler = function robotsOnMars_getRobotOnMoveForwardHandler() {
 		var robotsOnMars = this;
 		return function robotsOnMars_getRobotOnMoveForwardHandler_Closure() {
-			//this event handler is totally useless
-			//should probably have reread the document properly
+			//this is starting to feel  wrong see Issue #6 - too circular
+			robotsOnMars.checkRobotStatus(this);
 			
 		}
+	}
+	RobotsOnMars.prototype.checkRobotStatus =  function (robot) {
+		if (this.robotIsLost(robot)) {
+			robot.lost = true;
+		}
+	}
+	RobotsOnMars.prototype.robotIsLost = function (robot) {
+		return !this.grid.hasPosition(robot.coordinate.x,robot.coordinate.y)
 	}
 	RobotsOnMars.prototype.getRobotOnProcessInstructionEndHandler = function robotsOnMars_getRobotOnProcessInstructionEndHandler() {
 		var robotsOnMars = this;
@@ -48,7 +59,7 @@
 	}
 	RobotsOnMars.prototype.buildOutputFromRobot = function robots_buildOutputFromRobot(robot) {
 		this.currentOutput = robot.coordinate.x+" "+robot.coordinate.y+" "+robot.orientation;
-		if (!this.grid.hasPosition(robot.coordinate.x,robot.coordinate.y)) {
+		if (robot.lost) {
 			this.currentOutput += " LOST"
 		}
 	
