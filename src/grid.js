@@ -30,7 +30,7 @@ RemoteGrid.prototype.setBoundaries = function remoteGrid_setBoundaries(maxWidth,
 	this.maxHeight = maxHeight;
 	this.validate();
 }
-RemoteGrid.prototype.validate = function remoteGrid_validate() {
+RemoteGrid.prototype.validate = function remoteGrid_validate() {//see Issue #3
 	if ((typeof this.maxWidth) != "number" || typeof this.maxHeight != "number" || typeof this.width !=  "number" || typeof this.height != "number") {
 		throw "Illegal dimensions set on grid";
 	}
