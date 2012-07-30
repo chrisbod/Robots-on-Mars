@@ -1,6 +1,64 @@
 <!doctype html>
 <html>
 	<head>
+	<script>
+	function RobotsOnMars() {}
+	
+	var robotsOnMars = new RobotsOnMars();
+	
+	
+	</script>
+	<script>
+
+
+window.onerror = function (error) {//now that is lazy
+	alert(error);
+}
+
+robotsOnMars.createGrid("5 3"); //things are better when you pay attention
+
+//sanity check 
+if (!robotsOnMars.hasCoordinate(0,0) || robotsOnMars.hasCoordinate(5,3)) {
+	throw "Mapping has resulted in incorrect coordinate generation";
+}
+
+
+robotsOnMars
+	.insertRobot("1 1 E")
+	.instructRobot("RFRFRFRF")
+
+if (robotsOnMars.getOutput()!="1 1 E") {
+	throw "Unexpected result [1 1 E,RFRFRFRF]->"+robotsOnMars.getOutput();
+}
+robotsOnMars.renderOutput();
+
+robotsOnMars
+	.insertRobot("3 2 N");
+//check that we have a 'clean state' now that a new robot is in play
+if (robotsOnMars.getOutput()) {
+	throw "Inserted new robot but output is not clean ("+robotsOnMars.getOutput()+")";
+}
+
+robotsOnMars.instructRobot("FRRFLLFFRRFLL")
+
+if (robotsOnMars.getOutput()!="3 3 N LOST") {
+	throw "Unexpected result [3 2 N,FRRFLLFFRRFLL]->"+robotsOnMars.getOutput();
+}
+robotsOnMars.renderOutput();
+robotsOnMars
+	.insertRobot("0 3 W")
+	.instructRobot("LLFFFLFLFL")
+if (robotsOnMars.getOutput()!="2 3 S") {
+	throw "Unexpected result [0 3 W,LLFFFLFLFL]->"+robotsOnMars.getOutput();
+}
+robotsOnMars.renderOutput()
+
+
+
+
+	
+
+	</script>
 	<style>
 	fieldset, div {
 		float: left;
