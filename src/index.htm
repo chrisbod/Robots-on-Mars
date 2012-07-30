@@ -1,19 +1,22 @@
 <!doctype html>
 <html>
 	<head>
+	<script src="grid.js"></script>
 	<script>
 	function RobotsOnMars() {}
 	RobotsOnMars.prototype.createGrid = function robotsOnMars_createGrid(gridDefinition) {
+		return this;
 	}
 	RobotsOnMars.prototype.insertRobot = function robotsOnMars_insertRobot(robotDefinition) {
+		return this;
 	}
 	RobotsOnMars.prototype.instructRobot = function robotsOnMars_instructRobot(instruction) {
+		return this;
 	}
 	RobotsOnMars.prototype.getOutput = function robotsOnMars_getOutput() {
+		
 	}
 	RobotsOnMars.prototype.renderOutput = function robotsOnMars_renderOutput() {
-	}
-	RobotsOnMars.prototype.hasCoordinate = function robotsOnMars_hasCoordinate(xCoordinate,yCoordinate) {
 	}
 	
 
@@ -28,11 +31,6 @@ window.onerror = function (error) {//now that is lazy
 }
 	var robotsOnMars = new RobotsOnMars();
 robotsOnMars.createGrid("5 3"); //things are better when you pay attention
-
-//sanity check 
-if (!robotsOnMars.hasCoordinate(0,0) || robotsOnMars.hasCoordinate(5,3)) {
-	throw "Mapping has resulted in incorrect coordinate generation";
-}
 
 
 robotsOnMars
