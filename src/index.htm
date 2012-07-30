@@ -19,10 +19,12 @@
 	RobotsOnMars.prototype.definitionArray = void (Array) || null;
 	RobotsOnMars.prototype.grid = void (RemoteGrid) || null;
 	RobotsOnMars.prototype.robots = void (Array(Robot)) || null;
+	RobotsOnMars.prototype.currentOutput = "";
 	
 	
 	//Methods
 	RobotsOnMars.prototype.insertRobot = function robotsOnMars_insertRobot(robotDefinition) {
+		delete this.currentOutput;
 		var robotDefinitionArray = robotDefinition.split(" "),
 			robot = new Robot(+robotDefinitionArray[0],+robotDefinitionArray[1],robotDefinitionArray[2]);
 		robot.onMoveForward = this.getRobotOnMoveForwardHandler();
@@ -40,13 +42,14 @@
 	RobotsOnMars.prototype.getRobotOnProcessInstructionEndHandler = function robotsOnMars_getRobotOnProcessInstructionEndHandler() {
 		var robotsOnMars = this;
 		return function robotsOnMars_getRobotOnProcessInstructionEndHandler_Closure() {
+			//this is totally the wrong approach I think see Issue #5
 			robotsOnMars.buildOutputFromRobot(this);
 		}
 	}
 	RobotsOnMars.prototype.buildOutputFromRobot = function robots_buildOutputFromRobot(robot) {
-		this.lastOutput = robot.coordinate.x+" "+robot.coordinate.y+" "+robot.orientation;
+		this.currentOutput = robot.coordinate.x+" "+robot.coordinate.y+" "+robot.orientation;
 		if (!this.grid.hasPosition(robot.coordinate.x,robot.coordinate.y)) {
-			this.lastOutput += " LOST"
+			this.currentOutput += " LOST"
 		}
 	
 	}
@@ -60,10 +63,10 @@
 		robot.processInstruction(instruction);
 	}
 	RobotsOnMars.prototype.getOutput = function robotsOnMars_getOutput() {
-		return this.lastOutput;
+		return this.currentOutput;
 	}
 	RobotsOnMars.prototype.renderOutput = function robotsOnMars_renderOutput() {
-		alert(this.lastOutput);
+		alert(this.currentOutput);
 	}
 	
 	
