@@ -79,33 +79,37 @@ Robot.prototype.moveForward = function robot_moveForward() {
 	var coordinate = this.coordinate,
 		currentX = coordinate.x, //store these to move the scent correctly
 		currentY = coordinate.y,
+		nextX = currentX,
+		nextY = currentY,
 		currentPosition = this.ownerGrid.getPosition(currentX,currentY),
 		currentScentPosition = this.ownerGrid.getPosition(this.scent.coordinate.x,this.scent.coordinate.y),
 		newPosition;
 	switch (this.orientation) {
 		case this.NORTH: {
-			coordinate.y++;//remember origin is bottom left not top left;
+			nextY++;//remember origin is bottom left not top left;
 			break;
 		}
 		case this.EAST: {
-			coordinate.x++;
+			nextX++;
 			break;
 		}
 		case this.SOUTH: {
-			coordinate.y--;
+			nextY--;
 			break;
 		}
 		case this.WEST: {
-			coordinate.x--;
+			nextX--;
 			break;
 		}
 		default: {
 			throw "Unknown orientation for robot";
 		}
 	}
-	newPosition = this.ownerGrid.getPosition(coordinate.x,coordinate.y);
-	
+	newPosition = this.ownerGrid.getPosition(nextX,nextY);
 	if (newPosition == null) {//owner grid does not contain new position
+		if (this.canSmellScentAt(currentPosition)) {//again this feels wrong the robot knows it's about to go off map! but if it can't smell anything it doesn't care!!
+			return;//ignore command
+		}
 		this.lost = true;
 	} else {
 		currentPosition.removeItem(this);
@@ -118,6 +122,14 @@ Robot.prototype.moveForward = function robot_moveForward() {
 	if (this.onMoveForward) {
 		this.onMoveForward()
 	}
+}
+Robot.prototype.canSmellScentAt = function robot_canSmellScentAt(position) {
+	for (var items = position.items,i =0;i!=items.length;i++) {
+		if (items[i] instanceof RobotScent) {
+			return true;
+		}
+	}
+	return false;
 }
 
 function RobotScent(x,y,ownerGrid) {

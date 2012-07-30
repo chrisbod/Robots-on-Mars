@@ -58,7 +58,6 @@
 		}
 	}
 	RobotsOnMars.prototype.buildOutputFromRobot = function robots_buildOutputFromRobot(robot) {
-		
 		if (robot.lost) {
 			this.currentOutput = robot.scent.coordinate.x + " " + robot.scent.coordinate.y +" "+robot.orientation + " LOST"
 		} else {
