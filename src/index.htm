@@ -9,17 +9,20 @@
 		this.definitionString = gridDefinition;
 		this.definitionArray = gridDefinition.split(" ");
 		this.grid = new RemoteGrid(this.definitionArray[0],this.definitionArray[1]);
+		this.robots = [];
 		return this;
 	}
 	//Properties
 	RobotsOnMars.prototype.definitionString = "";
 	RobotsOnMars.prototype.definitionArray = void (Array) || null;
 	RobotsOnMars.prototype.grid = void (RemoteGrid) || null;
+	RobotsOnMars.prototype.robots = void (Array(Robot)) || null;
 	
 	
 	//Methods
 	RobotsOnMars.prototype.insertRobot = function robotsOnMars_insertRobot(robotDefinition) {
-		return this;
+		var robotDefinitionArray = robotDefinition.split(" ");
+		this.robots.push(new Robot(robotDefinitionArray[0],robotDefinitionArray[1],robotDefinitionArray[2]));
 	}
 	RobotsOnMars.prototype.instructRobot = function robotsOnMars_instructRobot(instruction) {
 		return this;
@@ -52,9 +55,8 @@ if (!robotsOnMars.grid.hasPosition(0,0) || robotsOnMars.grid.hasPosition(6,4)) {
 	throw "robots on mars grid is not sized correctly";
 }
 
-robotsOnMars
-	.insertRobot("1 1 E")
-	.instructRobot("RFRFRFRF")
+robotsOnMars.insertRobot("1 1 E");
+robotsOnMars.instructRobot("RFRFRFRF"); //I'll never really get into chaining properly
 
 if (robotsOnMars.getOutput()!="1 1 E") {
 	throw "Unexpected result [1 1 E,RFRFRFRF]->"+robotsOnMars.getOutput();
