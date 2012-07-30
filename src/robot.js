@@ -14,7 +14,7 @@ Robot.prototype.turnLeft = function robot_turnLeft() {
 }
 Robot.prototype.turnRight = function robot_turnRight() {
 
-]
+}
 Robot.prototype.moveForward = function robot_moveForward() {
 
 }
