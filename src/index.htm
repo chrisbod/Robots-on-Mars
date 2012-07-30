@@ -30,6 +30,8 @@
 	RobotsOnMars.prototype.renderOutput = function robotsOnMars_renderOutput() {
 	}
 	
+	
+	
 
 	
 	
@@ -43,6 +45,12 @@ window.onerror = function (error) {//now that is lazy
 	var robotsOnMars = new RobotsOnMars();
 robotsOnMars.createGrid("5 3"); //things are better when you pay attention
 
+//putting back in grid testing (a bit sneaky to have it here as it really is a 'unit' test for grids not robotsOnMars)
+//over doing it a bit but logged as Issue #1;
+
+if (!robotsOnMars.grid.hasPosition(0,0) || robotsOnMars.grid.hasPosition(6,4)) {
+	throw "robots on mars grid is not sized correctly";
+}
 
 robotsOnMars
 	.insertRobot("1 1 E")

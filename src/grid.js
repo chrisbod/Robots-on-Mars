@@ -19,8 +19,8 @@ RemoteGrid.prototype.populateLookup = function remoteGrid_populateLookup() {
 		}
 	}
 }
-RemoteGrid.prototype.hasPosition = function remoteGrid_hasPosition() {
-	
+RemoteGrid.prototype.hasPosition = function remoteGrid_hasPosition(x,y) {
+	return this.lookup[x+"_"+y] ? true : false;
 }
 
 function GridCoordinate(x,y) {
