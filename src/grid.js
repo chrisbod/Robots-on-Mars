@@ -6,10 +6,13 @@ function RemoteGrid(width,height) {
 	this.lookup = {};
 	//do we pre-populate the grid with positions - I think so;
 	this.populateLookup();
+	this.validate()
 }
 //properties
 RemoteGrid.prototype.width = 0;
 RemoteGrid.prototype.height = 0;
+RemoteGrid.prototype.maxWidth = -1;
+RemoteGrid.prototype.maxHeight = -1;
 RemoteGrid.prototype.lookup = void (Object) || null;
 //methods
 RemoteGrid.prototype.populateLookup = function remoteGrid_populateLookup() {
@@ -25,11 +28,16 @@ RemoteGrid.prototype.hasPosition = function remoteGrid_hasPosition(x,y) {
 RemoteGrid.prototype.setBoundaries = function remoteGrid_setBoundaries(maxWidth,maxHeight) {
 	this.maxWidth = maxWidth;
 	this.maxHeight = maxHeight;
-	this.checkBoundaries();
+	this.validate();
 }
-RemoteGrid.prototype.checkBoundaries = function remoteGrid_checkBoundaries() {
-	if (this.width>this.maxWidth || this.height>this.maxHeight) {
-		throw "Illegal boundaries set for remoteGrid";
+RemoteGrid.prototype.validate = function remoteGrid_validate() {
+	if ((typeof this.maxWidth) != "number" || typeof this.maxHeight != "number" || typeof this.width !=  "number" || typeof this.height != "number") {
+		throw "Illegal dimensions set on grid";
+	}
+	if (this.maxWidth != -1 && this.maxHeight != -1) {
+		if (this.width>this.maxWidth || this.height>this.maxHeight) {
+			throw "Illegal boundaries set for remoteGrid";
+		}
 	}
 }
 

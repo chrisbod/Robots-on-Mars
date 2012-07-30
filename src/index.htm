@@ -8,7 +8,7 @@
 	RobotsOnMars.prototype.createGrid = function robotsOnMars_createGrid(gridDefinition) {
 		this.definitionString = gridDefinition;
 		this.definitionArray = gridDefinition.split(" ");
-		this.grid = new RemoteGrid(this.definitionArray[0],this.definitionArray[1]);
+		this.grid = new RemoteGrid(+this.definitionArray[0],+this.definitionArray[1]);
 		this.grid.setBoundaries(50,50);
 		this.robots = [];
 		return this;
@@ -23,7 +23,7 @@
 	//Methods
 	RobotsOnMars.prototype.insertRobot = function robotsOnMars_insertRobot(robotDefinition) {
 		var robotDefinitionArray = robotDefinition.split(" ");
-		this.robots.push(new Robot(robotDefinitionArray[0],robotDefinitionArray[1],robotDefinitionArray[2]));
+		this.robots.push(new Robot(+robotDefinitionArray[0],+robotDefinitionArray[1],robotDefinitionArray[2]));
 	}
 	RobotsOnMars.prototype.instructRobot = function robotsOnMars_instructRobot(instruction) {
 		return this;
